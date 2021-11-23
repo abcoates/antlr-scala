@@ -34,4 +34,22 @@ class AntlrScalaListenerSpec extends AnyFlatSpec with should.Matchers {
     ParseTreeWalker.DEFAULT.walk(extractor, tree) // initiate walk of tree with listener in use of default walker
   }
 
+  val animalModel = """
+      |model{
+      |  class Animalia {
+      |    property zebra: Animal[2..5];
+      |    property lion: Animal[1];
+      |  }
+      |}
+      |""".stripMargin
+
+  it should "work for models" in {
+    val lexer = new MiniModelLexer(CharStreams.fromString(animalModel))
+    val tokens: TokenStream = new CommonTokenStream(lexer)
+    val parser = new MiniModelParser(tokens)
+    val tree = parser.model() // parse a model
+    val extractor = new AntlrScalaListener()
+    ParseTreeWalker.DEFAULT.walk(extractor, tree) // initiate walk of tree with listener in use of default walker
+  }
+
 }

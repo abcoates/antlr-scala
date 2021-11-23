@@ -1,21 +1,19 @@
 package org.contakt.scala.antlr
 
 import org.antlr.v4.runtime.ParserRuleContext
-import org.antlr.v4.runtime.tree.TerminalNode
-import com.contakt.scala.antlr.grammar.ArithmeticBaseListener
-import scala.collection.mutable.{ListBuffer,Stack}
+import org.antlr.v4.runtime.tree.{ErrorNode, ParseTreeListener, TerminalNode}
+import scala.collection.mutable.{ListBuffer, Stack}
+import org.contakt.util.DebugStack
 
-class AntlrScalaListener extends ArithmeticBaseListener {
+class AntlrScalaListener extends ParseTreeListener {
 
-  val stack = Stack[ListBuffer[AnyRef]]()
+  val stack: Stack[ListBuffer[AnyRef]] = Stack[ListBuffer[AnyRef]]()
 
   override def enterEveryRule(ctx: ParserRuleContext): Unit = {
-    super.enterEveryRule(ctx)
     stack.push(ListBuffer[AnyRef]())
   }
 
   override def exitEveryRule(ctx: ParserRuleContext): Unit = {
-    super.exitEveryRule(ctx)
     if (stack.size > 1) {
       if (stack.top.isEmpty) {
         stack.pop()
@@ -29,33 +27,18 @@ class AntlrScalaListener extends ArithmeticBaseListener {
       }
     }
     if (ctx.getParent == null) { // we are back at the top-level parse expression
-      val result: Option[AnyRef] =
-          if (stack.top.isEmpty) {
-            None
-          } else {
-            Some(stack.top.toList.head)
-          }
+      val result = stack.top match {
+        case lb: ListBuffer[_] => lb.toList
+        case other => other
+      }
       println(s"$result")
     }
   }
 
   override def visitTerminal(node: TerminalNode): Unit = {
-    super.visitTerminal(node)
     stack.top.addOne(node.getText)
   }
 
-}
+  override def visitErrorNode(node: ErrorNode): Unit = {}
 
-object AntlrScalaListener {
-  def resultToString(result: AnyRef): String = {
-    result match {
-      case None => "None"
-      case Some(x) => s"Some(${resultToString(x.asInstanceOf[AnyRef])})"
-      case "" => "\"\""
-      case str:String => s"\"$str\""
-      case head::tail => s"[${resultToString(head.asInstanceOf[AnyRef])},${resultToString(tail)}]"
-      case nil => "[]"
-      case _ => s"{${result.toString}}"
-    }
-  }
 }
