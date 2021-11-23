@@ -7,12 +7,14 @@ sealed trait ParsedItem {
   def toShortString(): String
   def isEmpty(): Boolean
   def size(): Int
+  def getDepth(): Int
 }
 
 case class ParsedValue(val index: Int, val depth: Int, val token: String) extends ParsedItem {
   override def toShortString(): String = token
   override def isEmpty(): Boolean = false
   override def size(): Int = 1
+  override def getDepth() = depth
 }
 case class ParsedNode(val index: Int, val depth: Int, val parseItems: List[ParsedItem]) extends ParsedItem {
   override def toShortString(): String = {
@@ -21,6 +23,7 @@ case class ParsedNode(val index: Int, val depth: Int, val parseItems: List[Parse
   }
   override def isEmpty(): Boolean = parseItems.isEmpty
   override def size(): Int = parseItems.size
+  override def getDepth() = depth
 }
 
 case class MutableParsedNode(val index: Int, val depth: Int, val parseItems: ListBuffer[ParsedItem]) extends ParsedItem {
@@ -30,6 +33,7 @@ case class MutableParsedNode(val index: Int, val depth: Int, val parseItems: Lis
   }
   override def isEmpty(): Boolean = parseItems.isEmpty
   override def size(): Int = parseItems.size
+  override def getDepth() = depth
 }
 
 object ParsedItem {

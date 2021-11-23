@@ -24,7 +24,9 @@ class AntlrScalaListener extends ParseTreeListener {
       } else {
         val top = stack.pop()
         stack.top match {
-          case mpn: MutableParsedNode => mpn.parseItems.addOne(top)
+          case mpn: MutableParsedNode =>
+            assert(top.getDepth() == mpn.depth + 1, s"depth mismatch appending ${top.getDepth()} to ${mpn.depth}")
+            mpn.parseItems.addOne(top)
           case _ => assert(false, "expected to find MutableParsedNode on top of stack")
         }
       }
@@ -39,6 +41,7 @@ class AntlrScalaListener extends ParseTreeListener {
   override def visitTerminal(node: TerminalNode): Unit = {
     stack.top match {
       case mpn: MutableParsedNode =>
+        assert(depth == mpn.depth + 1, "depth mis-match appending terminal")
         mpn.parseItems.addOne(ParsedValue(index, depth, node.getText))
         index += 1
       case _ => assert(false, "expected to find MutableParsedNode on top of stack")
