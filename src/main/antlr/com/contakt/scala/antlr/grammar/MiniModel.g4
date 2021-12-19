@@ -1,5 +1,9 @@
 grammar MiniModel;
 
+@header {
+package com.contakt.scala.antlr.grammar; // forced by IDEA Antlr plugin to use 'com...' instead of 'org...'
+}
+
 model: 'model' '{' declaration* '}';
 
 declaration: class_declaration;

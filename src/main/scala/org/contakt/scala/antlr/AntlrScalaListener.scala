@@ -19,7 +19,7 @@ class AntlrScalaListener extends ParseTreeListener {
   override def exitEveryRule(ctx: ParserRuleContext): Unit = {
     depth -= 1
     if (stack.size > 1) {
-      if (stack.top.isEmpty) {
+      if (stack.top.isEmpty()) {
         stack.pop()
       } else {
         val top = stack.pop()

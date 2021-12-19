@@ -1,10 +1,13 @@
 import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should
+import org.junit.runner.RunWith
+import org.scalatestplus.junit.JUnitRunner
 import org.antlr.v4.runtime.{CharStreams, CommonTokenStream, TokenStream}
 import org.antlr.v4.runtime.tree.ParseTreeWalker
 import com.contakt.scala.antlr.grammar._
 import org.contakt.scala.antlr.AntlrScalaListener
 
+@RunWith(classOf[JUnitRunner])
 class AntlrScalaListenerSpec extends AnyFlatSpec with should.Matchers {
 
   "A Scala Antlr listener" should "walk an Antlr tree" in {
