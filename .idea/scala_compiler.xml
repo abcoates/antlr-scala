@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ScalaCompilerConfiguration">
-    <profile name="Gradle 1" modules="antlr-scala.main,antlr-scala.test">
+    <profile name="Gradle 2" modules="antlr-scala.main,antlr-scala.test">
       <option name="deprecationWarnings" value="true" />
       <option name="uncheckedWarnings" value="true" />
       <parameters>
-        <parameter value="-target:jvm-13" />
+        <parameter value="-target:jvm-16" />
       </parameters>
     </profile>
   </component>
